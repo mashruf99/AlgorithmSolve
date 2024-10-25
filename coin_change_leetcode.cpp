@@ -46,3 +46,9 @@ int main()
 
     return 0;
 }
+
+
+
+//another approach
+
+
