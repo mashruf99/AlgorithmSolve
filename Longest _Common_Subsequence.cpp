@@ -11,40 +11,81 @@ using namespace std;
 #define pb push_back
 #define ff first
 #define mp make_pair
-#define no cout<<"NO"<<'\n'
-#define yes cout<<"YES"<<'\n'
+#define no cout << "NO" << '\n'
+#define yes cout << "YES" << '\n'
 #define endl '\n'
 #define fast() ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0)
 
-
-int ans(string &a, int n, string &b, int m, vector<vector<int>> &dp) {
-        if (n == 0 || m == 0) return 0;
-        if (dp[n][m] != -1) return dp[n][m];
-        
-        if (a[n-1] == b[m-1]) {
-            dp[n][m] = 1 + ans(a, n-1, b, m-1,dp);
-        } else {
-            int ans1 = ans(a, n-1, b, m, dp);
-            int ans2 = ans(a, n, b, m-1, dp);
-            dp[n][m] = max(ans1, ans2);
-        }
-        
+int ans(string &a, int n, string &b, int m, vector<vector<int>> &dp)
+{
+    if (n == 0 || m == 0)
+        return 0;
+    if (dp[n][m] != -1)
         return dp[n][m];
+
+    if (a[n - 1] == b[m - 1])
+    {
+        dp[n][m] = 1 + ans(a, n - 1, b, m - 1, dp);
+    }
+    else
+    {
+        int ans1 = ans(a, n - 1, b, m, dp);
+        int ans2 = ans(a, n, b, m - 1, dp);
+        dp[n][m] = max(ans1, ans2);
     }
 
-    int longestCommonSubsequence(string a, string b) {
-        int n = a.size();
-        int m = b.size();
-        vector<vector<int>> dp(n + 1, vector<int>(m + 1, -1));
-        return ans(a, n, b, m, dp);
-    }
+    return dp[n][m];
+}
+
+int longestCommonSubsequence(string a, string b)
+{
+    int n = a.size();
+    int m = b.size();
+    vector<vector<int>> dp(n + 1, vector<int>(m + 1, -1));
+    return ans(a, n, b, m, dp);
+}
 
 int main()
 {
     fast();
-    string a,b;
-    cin>>a>>b;
-    cout<< longestCommonSubsequence(a, b);
+    string a, b;
+    cin >> a >> b;
+    cout << longestCommonSubsequence(a, b);
+
+    return 0;
+}
+
+// alternative bottom up solution'
+
+int longestCommonSubsequence(string a, string b)
+{
+    int n = a.size();
+    int m = b.size();
+    vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
+
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 1; j <= m; j++)
+        {
+            if (a[i - 1] == b[j - 1])
+            {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            }
+            else
+            {
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+
+    return dp[n][m];
+}
+int main()
+{
+    fast();
+    string a, b;
+    cin >> a >> b;
+    cout << longestCommonSubsequence(a, b);
 
     return 0;
 }
